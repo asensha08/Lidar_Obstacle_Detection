@@ -67,6 +67,38 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
 	srand(time(NULL));
 	
 	// TODO: Fill in this function
+	while(maxIterations--)
+	{
+		std::unordered_set<int> inliers;
+		while(inliers.size() <2)
+		{
+			inliers.insert(rand()%(cloud->points.size()));			
+		}
+		float x1;
+		float x2;
+		float y1;
+		float y2;
+		auto itr = inliers.begin();
+		x1 = cloud->points[*itr].x;
+		y1 = cloud->points[*itr].y;
+		itr++;
+		x2 = cloud->points[*itr].x;
+		y2 = cloud->points[*itr].y;
+
+		float a = (y1-y2);
+		float b= (x2-x1);
+		float c =(x1*y2 - x2*y1);
+
+		for(int index =0; index <cloud->points.size(); index++)
+		{
+			if(inliers.count(index) >0)
+			{
+				continue;
+			}
+			
+		}
+
+	}
 
 	// For max iterations 
 
@@ -92,7 +124,7 @@ int main ()
 	
 
 	// TODO: Change the max iteration and distance tolerance arguments for Ransac function
-	std::unordered_set<int> inliers = Ransac(cloud, 0, 0);
+	std::unordered_set<int> inliers = Ransac(cloud, 20, 0.2);
 
 	pcl::PointCloud<pcl::PointXYZ>::Ptr  cloudInliers(new pcl::PointCloud<pcl::PointXYZ>());
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloudOutliers(new pcl::PointCloud<pcl::PointXYZ>());
