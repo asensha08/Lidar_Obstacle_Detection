@@ -96,6 +96,7 @@ std::unordered_set<int> Ransac(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud, int ma
 				continue;
 			}
 			
+			
 		}
 
 	}
