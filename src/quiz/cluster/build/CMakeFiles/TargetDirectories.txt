@@ -1,0 +1,3 @@
+/home/asensha/SFND_LIDAR_OBSTACLE/src/quiz/cluster/build/CMakeFiles/edit_cache.dir
+/home/asensha/SFND_LIDAR_OBSTACLE/src/quiz/cluster/build/CMakeFiles/rebuild_cache.dir
+/home/asensha/SFND_LIDAR_OBSTACLE/src/quiz/cluster/build/CMakeFiles/quizCluster.dir

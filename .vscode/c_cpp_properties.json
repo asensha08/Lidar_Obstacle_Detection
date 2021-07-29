@@ -40,7 +40,8 @@
                 "/usr/include",
                 "/usr/include/pcl-1.7",
                 "/usr/include/eigen3",
-                "/usr/include/vtk-6.2"
+                "/usr/include/vtk-6.2",
+                "${workspaceFolder}/src/quiz/cluster"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",
@@ -61,7 +62,8 @@
             },
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c11",
-            "cppStandard": "c++17"
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/src/quiz/ransac/build/compile_commands.json"
         },
         {
             "name": "Win32",

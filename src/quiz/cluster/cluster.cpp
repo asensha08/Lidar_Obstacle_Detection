@@ -75,12 +75,45 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 
 }
 
+void clusterHelper(int indice, std::vector<int> &cluster, const std::vector<std::vector<float>> points , KdTree *tree, std::vector<bool> &processed, float distanceTol)
+{
+	processed[indice] = true;
+	cluster.push_back(indice);
+
+	std::vector<int> nearest = tree->search(points[indice], distanceTol);
+	for(int id : nearest)
+	{
+		if(!processed[id])
+		{
+			clusterHelper(id, cluster, points, tree, processed, distanceTol);
+		}
+	}
+}
+
+
 std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol)
 {
 
 	// TODO: Fill out this function to return list of indices for each cluster
 
 	std::vector<std::vector<int>> clusters;
+	std::vector<bool> processed(points.size(), false);
+	
+	int i =0;
+	while(i<points.size())
+	{
+		if(!processed[i])
+		{
+			std::vector<int> cluster;
+			clusterHelper(i, cluster, points, tree, processed, distanceTol);
+			clusters.push_back(cluster);
+		}
+		else
+		{
+			i++;
+			continue;
+		}
+	}
  
 	return clusters;
 
@@ -102,12 +135,57 @@ int main ()
 	// Create data
 	std::vector<std::vector<float>> points = { {-6.2,7}, {-6.3,8.4}, {-5.2,7.1}, {-5.7,6.3}, {7.2,6.1}, {8.0,5.3}, {7.2,7.1}, {0.2,-7.1}, {1.7,-6.9}, {-1.2,-7.2}, {2.2,-8.9} };
 	//std::vector<std::vector<float>> points = { {-6.2,7}, {-6.3,8.4}, {-5.2,7.1}, {-5.7,6.3} };
+	std::vector<std::vector<float>> points_temp;
 	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud = CreateData(points);
+	//std::sort(points.begin(), points.end());//[](const std::vector<float>& a, const std::vector<float>& b){ return a[1]<b[1];});
+	//std::cout<<points[3][0];
+	//std::cout<<points[3][1];
+ 
 
 	KdTree* tree = new KdTree;
-  
+
+	/*
+	int i=0;
+	while(points.size() >0)
+	{
+		if(points.size() %2 == 0)
+		{
+			std::sort(points.begin(), points.end());
+			int median_index = points.size()/2;
+			std::cout<<"Inserting "<<points[median_index][0] <<", "<<points[median_index][1] <<"\n";
+			points_temp.push_back(points[median_index]);
+			tree->insert(points[median_index], i);
+			std::cout<<points[points.size()-1][0];
+			std::cout<<" "<<points[points.size()-1][1]<<"\n";
+ 
+			points.erase(points.begin()+median_index);
+			std::cout<<"Size = "<<points.size()<<"\n";
+
+		}
+		else
+		{
+			std::sort(points.begin(), points.end(),[](const std::vector<float>& a, const std::vector<float>& b){ return a[1]<b[1];});
+			int median_index = points.size()/2;
+			std::cout<<"Inserting "<<points[median_index][0] <<", "<<points[median_index][1] <<"\n";
+			points_temp.push_back(points[median_index]);
+			tree->insert(points[median_index], i);
+			std::cout<<points[points.size()-1][0];
+			std::cout<<" "<<points[points.size()-1][1]<<"\n";
+			points.erase(points.begin()+median_index);
+			std::cout<<"Size = "<<points.size()<<"\n";
+
+		}
+		i++;
+		
+	}
+	
+
+	points = points_temp;
+	*/
+	
     for (int i=0; i<points.size(); i++) 
     	tree->insert(points[i],i); 
+	
 
   	int it = 0;
   	render2DTree(tree->root,viewer,window, it);
